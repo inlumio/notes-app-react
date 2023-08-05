@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	font-family: 'Jost', sans-serif;
+}
+
+table {
+	@apply border-separate border-spacing-y-2;
+}
+
+i {
+	@apply text-xl;
+}
+th {
+	@apply text-start;
+}
+
+tr {
+}
+
+:where(td, th):first-child {
+	@apply rounded-s-md;
+}
+:where(td, th):last-child {
+	@apply rounded-e-md;
+}
+
+.toggle {
+	@apply block relative w-8 h-5 bg-slate-200 rounded-full p-0.5;
+
+	$parent: &;
+
+	input {
+		appearance: none;
+		position: absolute;
+	}
+
+	span {
+		@apply w-4 bg-slate-700 aspect-square rounded-full absolute left-0.5;
+		transition: left 0.25s ease-in-out;
+	}
+
+	input:checked + span {
+		@apply left-3.5;
+	}
+}
+
+button {
+	@apply px-6 py-2 rounded-lg font-bold transition-colors;
+}
+
+dialog {
+	@apply max-w-lg w-full bg-slate-500 p-6 rounded-lg;
+
+	&::backdrop {
+		@apply bg-slate-800 opacity-60;
+	}
+
+	form {
+		@apply flex flex-col gap-4;
+
+		label {
+			@apply flex flex-col gap-1 relative;
+
+			h4 {
+				@apply text-white;
+			}
+
+			.err-msg {
+				@apply text-red-400 absolute right-0;
+			}
+		}
+
+		input {
+			@apply px-4 py-2  rounded-md;
+		}
+
+		textarea {
+			@apply resize-none block w-full px-4 py-2 rounded-md;
+		}
+
+		select,
+		option {
+			@apply px-4 py-2 rounded-md;
+		}
+
+		button {
+			@apply border-4 border-solid border-white text-white hover:bg-white hover:text-slate-500;
+		}
+	}
+}
+
+[aria-invalid='false'] ~ .err-msg {
+	@apply invisible;
+}
