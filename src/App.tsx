@@ -1,11 +1,11 @@
 import { Modal } from './components/Modal';
 import { NoteRow } from './components/NoteRow';
 import { NotesTable } from './components/NotesTable';
-import { useAppDispatch, useAppSelector } from './store/hooks';
-// import Category from './types/CategoriesEnum';
+import { SummaryRow } from './components/SummaryRow';
+import { useAppSelector } from './store/hooks';
+import { countNotesByCategory } from './utils/countNotesByCategory';
 
 const App = () => {
-	const dispatch = useAppDispatch();
 	const notes = useAppSelector((state) => state.notes);
 
 	return (
@@ -85,7 +85,11 @@ const App = () => {
 							<th className='px-4 py-2 bg-slate-500 text-white'>Archived</th>
 						</tr>
 					</thead>
-					<tbody></tbody>
+					<tbody>
+						{countNotesByCategory(notes).map((category) => (
+							<SummaryRow key={category.categoryName} categoryData={category} />
+						))}
+					</tbody>
 				</NotesTable>
 			</section>
 
