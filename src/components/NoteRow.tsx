@@ -3,7 +3,11 @@ import { formatDate } from '../utils/formatDate';
 import { findDatesInString } from '../utils/findDatesInString';
 import getCategoryIcon from '../utils/getCategoryIcon';
 
-export const NoteRow = (note: NoteType) => {
+interface NoteRowProps {
+	note: NoteType;
+}
+
+export const NoteRow: React.FC<NoteRowProps> = ({ note }) => {
 	return (
 		<tr data-note-id={note.id}>
 			<td className='px-4 py-2 bg-slate-200 w-10'>

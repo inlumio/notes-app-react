@@ -1,9 +1,13 @@
 import { Modal } from './components/Modal';
 import { NoteRow } from './components/NoteRow';
 import { NotesTable } from './components/NotesTable';
-import Category from './types/CategoriesEnum';
+import { useAppDispatch, useAppSelector } from './store/hooks';
+// import Category from './types/CategoriesEnum';
 
 const App = () => {
+	const dispatch = useAppDispatch();
+	const notes = useAppSelector((state) => state.notes);
+
 	return (
 		<main className='max-w-7xl mx-auto p-4'>
 			<section className='mb-10'>
@@ -58,13 +62,10 @@ const App = () => {
 						</tr>
 					</thead>
 					<tbody>
-						<NoteRow
-							id={1}
-							name='Shopping list'
-							category={Category.Task}
-							createdAt='2021/05/03'
-							content='Milk, eggs, bread on 07/05/2021'
-							archived={false}></NoteRow>
+						{notes.length > 0 &&
+							notes.map((note) => (
+								<NoteRow key={note.id} note={note}></NoteRow>
+							))}
 					</tbody>
 				</NotesTable>
 				<button className='create-btn ml-auto block text-white bg-slate-500 hover:bg-slate-700'>
