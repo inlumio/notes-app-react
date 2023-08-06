@@ -1,20 +1,34 @@
+import { useState } from 'react';
 import ActionButton from './components/ActionButton';
 import { Modal } from './components/Modal';
 import { NoteRow } from './components/NoteRow';
 import { NotesTable } from './components/NotesTable';
 import { SummaryRow } from './components/SummaryRow';
-import { useAppSelector } from './store/hooks';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import { countNotesByCategory } from './utils/countNotesByCategory';
+import { Toggler } from './components/Toggler';
+import { archiveNote, deleteNote } from './store/notesSlice';
+import { NoItemsRow } from './components/NoItemsRow';
 
 const App = () => {
+	const [toggleActive, setToggleActive] = useState(false);
 	const notes = useAppSelector((state) => state.notes);
+	const summaryData = countNotesByCategory(notes);
+	const toggleAccordingNotes = notes.filter(
+		(note) => note.archived === toggleActive
+	);
+	const dispatch = useAppDispatch();
 
 	const deleteAllHandler = () => {
-		console.log('delete all showed');
+		toggleAccordingNotes.forEach((note) => {
+			dispatch(deleteNote(note.id));
+		});
 	};
 
 	const archiveAllHandler = () => {
-		console.log('archive all showed');
+		toggleAccordingNotes.forEach((note) => {
+			dispatch(archiveNote(note.id));
+		});
 	};
 
 	return (
@@ -52,11 +66,8 @@ const App = () => {
 							<th className='px-4 py-2 bg-slate-500 text-white min-w-0'>
 								Dates
 							</th>
-							<th className='px-4 py-2 bg-slate-500 text-white'>
-								<label title='Show archived' className='toggle cursor-pointer'>
-									<input type='checkbox' name='' id='show-archived' />
-									<span></span>
-								</label>
+							<th className='px-4 py-2'>
+								<Toggler state={toggleActive} onStateChange={setToggleActive} />
 							</th>
 							<th className='px-4 py-2 bg-slate-500 text-white'>
 								<ActionButton action={archiveAllHandler}>
@@ -71,10 +82,13 @@ const App = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{notes.length > 0 &&
-							notes.map((note) => (
+						{toggleAccordingNotes.length > 0 ? (
+							toggleAccordingNotes.map((note) => (
 								<NoteRow key={note.id} note={note}></NoteRow>
-							))}
+							))
+						) : (
+							<NoItemsRow colspan={9} />
+						)}
 					</tbody>
 				</NotesTable>
 				<button className='create-btn ml-auto block text-white bg-slate-500 hover:bg-slate-700'>
@@ -95,9 +109,16 @@ const App = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{countNotesByCategory(notes).map((category) => (
-							<SummaryRow key={category.categoryName} categoryData={category} />
-						))}
+						{summaryData.length > 0 ? (
+							summaryData.map((category) => (
+								<SummaryRow
+									key={category.categoryName}
+									categoryData={category}
+								/>
+							))
+						) : (
+							<NoItemsRow colspan={4} />
+						)}
 					</tbody>
 				</NotesTable>
 			</section>

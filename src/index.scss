@@ -30,8 +30,6 @@ tr {
 .toggle {
 	@apply block relative w-8 h-5 bg-slate-200 rounded-full p-0.5;
 
-	$parent: &;
-
 	input {
 		appearance: none;
 		position: absolute;
