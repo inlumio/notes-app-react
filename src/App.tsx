@@ -1,3 +1,4 @@
+import ActionButton from './components/ActionButton';
 import { Modal } from './components/Modal';
 import { NoteRow } from './components/NoteRow';
 import { NotesTable } from './components/NotesTable';
@@ -7,6 +8,14 @@ import { countNotesByCategory } from './utils/countNotesByCategory';
 
 const App = () => {
 	const notes = useAppSelector((state) => state.notes);
+
+	const deleteAllHandler = () => {
+		console.log('delete all showed');
+	};
+
+	const archiveAllHandler = () => {
+		console.log('archive all showed');
+	};
 
 	return (
 		<main className='max-w-7xl mx-auto p-4'>
@@ -49,15 +58,15 @@ const App = () => {
 									<span></span>
 								</label>
 							</th>
-							<th
-								className='px-4 py-2 bg-slate-500 text-white cursor-pointer'
-								data-action='archive all'>
-								<i className='bx bxs-archive-in'></i>
+							<th className='px-4 py-2 bg-slate-500 text-white'>
+								<ActionButton action={archiveAllHandler}>
+									<i className='bx bxs-archive-in'></i>
+								</ActionButton>
 							</th>
-							<th
-								className='px-4 py-2 bg-slate-500 text-white cursor-pointer'
-								data-action='delete all'>
-								<i className='bx bxs-trash'></i>
+							<th className='px-4 py-2 bg-slate-500 text-white '>
+								<ActionButton action={deleteAllHandler}>
+									<i className='bx bxs-trash'></i>
+								</ActionButton>
 							</th>
 						</tr>
 					</thead>
