@@ -67,8 +67,8 @@ const notesSlice = createSlice({
 	name: 'notes',
 	initialState,
 	reducers: {
-		addNote: (state, action: PayloadAction<NoteType[]>) => {
-			[...state, action.payload];
+		addNote: (state, action: PayloadAction<NoteType>) => {
+			state.push(action.payload);
 		},
 		deleteNote: (state, action: PayloadAction<number>) => {
 			return state.filter((note) => note.id !== action.payload);
@@ -80,10 +80,16 @@ const notesSlice = createSlice({
 					: note
 			);
 		},
+		updateNote: (state, action: PayloadAction<NoteType>) => {
+			return state.map((note) =>
+				note.id === action.payload.id ? { ...note, ...action.payload } : note
+			);
+		},
 	},
 });
 
-export const { addNote, deleteNote, archiveNote } = notesSlice.actions;
+export const { addNote, deleteNote, archiveNote, updateNote } =
+	notesSlice.actions;
 
 export const notesReducer = notesSlice.reducer;
 
