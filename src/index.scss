@@ -49,11 +49,15 @@ button {
 	@apply px-6 py-2 rounded-lg font-bold transition-colors;
 }
 
-dialog {
-	@apply max-w-lg w-full bg-slate-500 p-6 rounded-lg;
+.modal {
+	@apply fixed inset-0 flex justify-center items-center;
 
-	&::backdrop {
-		@apply bg-slate-800 opacity-60;
+	.modal-overlay {
+		@apply bg-slate-800 opacity-60 absolute inset-0;
+	}
+
+	.modal-content {
+		@apply max-w-lg w-full bg-slate-500 p-6 rounded-lg z-10 shadow-md;
 	}
 
 	form {

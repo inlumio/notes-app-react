@@ -5,6 +5,8 @@ import getCategoryIcon from '../utils/getCategoryIcon';
 import ActionButton from './ActionButton';
 import { useAppDispatch } from '../store/hooks';
 import { archiveNote, deleteNote } from '../store/notesSlice';
+import { setActiveNote } from '../store/activeNoteSlice';
+import { openModal } from '../store/modalOpenSlice';
 
 interface NoteRowProps {
 	note: NoteType;
@@ -13,8 +15,9 @@ interface NoteRowProps {
 export const NoteRow: React.FC<NoteRowProps> = ({ note }) => {
 	const dispatch = useAppDispatch();
 
-	const editHandler = () => {
-		console.log('edit');
+	const editHandler = (note: NoteType) => {
+		dispatch(setActiveNote(note));
+		dispatch(openModal());
 	};
 	const archiveHandler = (id: number) => {
 		dispatch(archiveNote(id));
@@ -43,10 +46,10 @@ export const NoteRow: React.FC<NoteRowProps> = ({ note }) => {
 				{note.content}
 			</td>
 			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal'>
-				{findDatesInString(note.content)}
+				{findDatesInString(note.content).join(', ')}
 			</td>
 			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal'>
-				<ActionButton action={editHandler}>
+				<ActionButton action={() => editHandler(note)}>
 					<i className='bx bxs-edit'></i>
 				</ActionButton>
 			</td>

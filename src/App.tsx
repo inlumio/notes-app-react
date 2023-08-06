@@ -7,8 +7,15 @@ import { SummaryRow } from './components/SummaryRow';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { countNotesByCategory } from './utils/countNotesByCategory';
 import { Toggler } from './components/Toggler';
-import { archiveNote, deleteNote } from './store/notesSlice';
+import {
+	addNote,
+	archiveNote,
+	deleteNote,
+	updateNote,
+} from './store/notesSlice';
 import { NoItemsRow } from './components/NoItemsRow';
+import { closeModal, openModal } from './store/modalOpenSlice';
+import { resetActiveNote } from './store/activeNoteSlice';
 
 const App = () => {
 	const [toggleActive, setToggleActive] = useState(false);
@@ -17,6 +24,9 @@ const App = () => {
 	const toggleAccordingNotes = notes.filter(
 		(note) => note.archived === toggleActive
 	);
+
+	const modalOpened = useAppSelector((state) => state.modalOpen);
+
 	const dispatch = useAppDispatch();
 
 	const deleteAllHandler = () => {
@@ -91,11 +101,15 @@ const App = () => {
 						)}
 					</tbody>
 				</NotesTable>
-				<button className='create-btn ml-auto block text-white bg-slate-500 hover:bg-slate-700'>
+				<button
+					className='create-btn ml-auto block text-white bg-slate-500 hover:bg-slate-700'
+					onClick={() => {
+						dispatch(resetActiveNote());
+						dispatch(openModal());
+					}}>
 					Create Note
 				</button>
 			</section>
-
 			<section>
 				<NotesTable>
 					<thead className='bg-slate-500'>
@@ -123,7 +137,21 @@ const App = () => {
 				</NotesTable>
 			</section>
 
-			<Modal></Modal>
+			{modalOpened && (
+				<Modal
+					submit={(note) => {
+						if (note.id !== -1) dispatch(updateNote(note));
+						else {
+							note.createdAt = Intl.DateTimeFormat('en-US').format(new Date());
+							dispatch(addNote(note));
+						}
+
+						dispatch(closeModal());
+						dispatch(resetActiveNote());
+					}}
+					close={() => dispatch(closeModal())}
+				/>
+			)}
 		</main>
 	);
 };
