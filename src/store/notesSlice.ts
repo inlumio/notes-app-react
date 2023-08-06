@@ -70,20 +70,20 @@ const notesSlice = createSlice({
 		addNote: (state, action: PayloadAction<NoteType[]>) => {
 			[...state, action.payload];
 		},
-		// deleteNote: (state, action: PayloadAction<number>) => {
-		// 	return state.filter((note) => note.id !== action.payload);
-		// },
-		// archiveNote: (state, action: PayloadAction<number>) => {
-		// 	return state.map((note) =>
-		// 		note.id === action.payload
-		// 			? { ...note, archived: !note.archived }
-		// 			: note
-		// 	);
-		// },
+		deleteNote: (state, action: PayloadAction<number>) => {
+			return state.filter((note) => note.id !== action.payload);
+		},
+		archiveNote: (state, action: PayloadAction<number>) => {
+			return state.map((note) =>
+				note.id === action.payload
+					? { ...note, archived: !note.archived }
+					: note
+			);
+		},
 	},
 });
 
-export const { addNote } = notesSlice.actions;
+export const { addNote, deleteNote, archiveNote } = notesSlice.actions;
 
 export const notesReducer = notesSlice.reducer;
 

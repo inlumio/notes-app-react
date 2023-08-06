@@ -2,12 +2,27 @@ import NoteType from '../types/NoteType';
 import { formatDate } from '../utils/formatDate';
 import { findDatesInString } from '../utils/findDatesInString';
 import getCategoryIcon from '../utils/getCategoryIcon';
+import ActionButton from './ActionButton';
+import { useAppDispatch } from '../store/hooks';
+import { archiveNote, deleteNote } from '../store/notesSlice';
 
 interface NoteRowProps {
 	note: NoteType;
 }
 
 export const NoteRow: React.FC<NoteRowProps> = ({ note }) => {
+	const dispatch = useAppDispatch();
+
+	const editHandler = () => {
+		console.log('edit');
+	};
+	const archiveHandler = (id: number) => {
+		dispatch(archiveNote(id));
+	};
+	const deleteHandler = (id: number) => {
+		dispatch(deleteNote(id));
+	};
+
 	return (
 		<tr data-note-id={note.id}>
 			<td className='px-4 py-2 bg-slate-200 w-10'>
@@ -30,20 +45,20 @@ export const NoteRow: React.FC<NoteRowProps> = ({ note }) => {
 			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal'>
 				{findDatesInString(note.content)}
 			</td>
-			<td
-				className='px-4 py-2 bg-slate-200 text-slate-600 font-normal cursor-pointer'
-				data-action='edit'>
-				<i className='bx bxs-edit'></i>
+			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal'>
+				<ActionButton action={editHandler}>
+					<i className='bx bxs-edit'></i>
+				</ActionButton>
 			</td>
-			<td
-				className='px-4 py-2 bg-slate-200 text-slate-600 font-normal cursor-pointer'
-				data-action='archive'>
-				<i className='bx bxs-archive-in'></i>
+			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal cursor-pointer'>
+				<ActionButton action={() => archiveHandler(note.id)}>
+					<i className='bx bxs-archive-in'></i>
+				</ActionButton>
 			</td>
-			<td
-				className='px-4 py-2 bg-slate-200 text-slate-600 font-normal cursor-pointer'
-				data-action='delete'>
-				<i className='bx bxs-trash'></i>
+			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal cursor-pointer'>
+				<ActionButton action={() => deleteHandler(note.id)}>
+					<i className='bx bxs-trash'></i>
+				</ActionButton>
 			</td>
 		</tr>
 	);
