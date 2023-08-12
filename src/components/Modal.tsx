@@ -2,13 +2,14 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAppSelector } from '../store/hooks';
 import NoteType from '../types/NoteType';
 
-interface ModalProps {
+export interface ModalProps {
 	close: () => void;
 	submit: (data: NoteType) => void;
 }
 
 export const Modal = ({ submit, close }: ModalProps) => {
 	const activeNote = useAppSelector((state) => state.activeNote);
+	const modalOpened = useAppSelector((state) => state.modalOpen);
 
 	const {
 		register,
@@ -22,6 +23,8 @@ export const Modal = ({ submit, close }: ModalProps) => {
 	const submitHandler: SubmitHandler<NoteType> = (data) => {
 		submit(data);
 	};
+
+	if (!modalOpened) return null;
 
 	return (
 		<div className='modal'>

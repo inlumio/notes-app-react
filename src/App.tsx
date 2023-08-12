@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ActionButton from './components/ActionButton';
+import { ActionButton } from './components/ActionButton';
 import { Modal } from './components/Modal';
 import { NoteRow } from './components/NoteRow';
 import { NotesTable } from './components/NotesTable';
@@ -24,8 +24,6 @@ const App = () => {
 	const toggleAccordingNotes = notes.filter(
 		(note) => note.archived === toggleActive
 	);
-
-	const modalOpened = useAppSelector((state) => state.modalOpen);
 
 	const dispatch = useAppDispatch();
 
@@ -137,21 +135,19 @@ const App = () => {
 				</NotesTable>
 			</section>
 
-			{modalOpened && (
-				<Modal
-					submit={(note) => {
-						if (note.id !== -1) dispatch(updateNote(note));
-						else {
-							note.createdAt = Intl.DateTimeFormat('en-US').format(new Date());
-							dispatch(addNote(note));
-						}
+			<Modal
+				submit={(note) => {
+					if (note.id !== -1) dispatch(updateNote(note));
+					else {
+						note.createdAt = Intl.DateTimeFormat('en-US').format(new Date());
+						dispatch(addNote(note));
+					}
 
-						dispatch(closeModal());
-						dispatch(resetActiveNote());
-					}}
-					close={() => dispatch(closeModal())}
-				/>
-			)}
+					dispatch(closeModal());
+					dispatch(resetActiveNote());
+				}}
+				close={() => dispatch(closeModal())}
+			/>
 		</main>
 	);
 };
