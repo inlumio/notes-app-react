@@ -8,7 +8,7 @@ interface SummaryRowProps {
 
 export const SummaryRow: React.FC<SummaryRowProps> = ({ categoryData }) => {
 	return (
-		<tr className=''>
+		<tr className='w-full'>
 			<td className='px-4 py-2 bg-slate-200 w-0'>
 				<div className='rounded-full p-2 bg-slate-600 inline-flex'>
 					<i

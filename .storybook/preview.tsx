@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { store } from '../src/store/store';
 
 import '../src/index.scss';
+import 'boxicons/css/boxicons.min.css';
 
 const preview: Preview = {
 	parameters: {
