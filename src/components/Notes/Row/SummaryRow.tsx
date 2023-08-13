@@ -1,6 +1,6 @@
 import React from 'react';
-import CategoryCountType from '../types/CategoryCountType';
-import getCategoryIcon from '../utils/getCategoryIcon';
+import CategoryCountType from '../../../types/CategoryCountType';
+import getCategoryIcon from '../../../utils/getCategoryIcon';
 
 interface SummaryRowProps {
 	categoryData: CategoryCountType;

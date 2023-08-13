@@ -3,5 +3,9 @@ type Props = {
 };
 
 export const NotesTable = ({ children }: Props) => {
-	return <table className='w-full'>{children}</table>;
+	return (
+		<table className='w-full border-separate border-spacing-y-2'>
+			{children}
+		</table>
+	);
 };

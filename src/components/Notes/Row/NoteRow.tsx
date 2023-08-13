@@ -1,12 +1,11 @@
-import NoteType from '../types/NoteType';
-import { formatDate } from '../utils/formatDate';
-import { findDatesInString } from '../utils/findDatesInString';
-import getCategoryIcon from '../utils/getCategoryIcon';
-import ActionButton from './ActionButton';
-import { useAppDispatch } from '../store/hooks';
-import { archiveNote, deleteNote } from '../store/notesSlice';
-import { setActiveNote } from '../store/activeNoteSlice';
-import { openModal } from '../store/modalOpenSlice';
+import NoteType from '../../../types/NoteType';
+import { formatDate } from '../../../utils/formatDate';
+import { findDatesInString } from '../../../utils/findDatesInString';
+import getCategoryIcon from '../../../utils/getCategoryIcon';
+import { useAppDispatch } from '../../../store/hooks';
+import { archiveNote, deleteNote } from '../../../store/notesSlice';
+import { setActiveNote } from '../../../store/activeNoteSlice';
+import { openModal } from '../../../store/modalOpenSlice';
 
 interface NoteRowProps {
 	note: NoteType;
@@ -49,19 +48,19 @@ export const NoteRow: React.FC<NoteRowProps> = ({ note }) => {
 				{findDatesInString(note.content).join(', ')}
 			</td>
 			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal'>
-				<ActionButton action={() => editHandler(note)}>
-					<i className='bx bxs-edit'></i>
-				</ActionButton>
+				<button onClick={() => editHandler(note)}>
+					<i className='bx bxs-edit text-xl'></i>
+				</button>
 			</td>
 			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal cursor-pointer'>
-				<ActionButton action={() => archiveHandler(note.id)}>
-					<i className='bx bxs-archive-in'></i>
-				</ActionButton>
+				<button onClick={() => archiveHandler(note.id)}>
+					<i className='bx bxs-archive-in text-xl'></i>
+				</button>
 			</td>
 			<td className='px-4 py-2 bg-slate-200 text-slate-600 font-normal cursor-pointer'>
-				<ActionButton action={() => deleteHandler(note.id)}>
-					<i className='bx bxs-trash'></i>
-				</ActionButton>
+				<button onClick={() => deleteHandler(note.id)}>
+					<i className='bx bxs-trash text-xl'></i>
+				</button>
 			</td>
 		</tr>
 	);

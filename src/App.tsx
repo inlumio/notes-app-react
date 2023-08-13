@@ -1,19 +1,18 @@
 import { useState } from 'react';
-import { ActionButton } from './components/ActionButton';
-import { Modal } from './components/Modal';
-import { NoteRow } from './components/NoteRow';
-import { NotesTable } from './components/NotesTable';
-import { SummaryRow } from './components/SummaryRow';
+import { ActionButton } from './components/ActionButton/ActionButton';
+import { Modal } from './components/Modal/Modal';
+import { NoteRow } from './components/Notes/Row/NoteRow';
+import { NotesTable } from './components/Notes/Table/NotesTable';
+import { SummaryRow } from './components/Notes/Row/SummaryRow';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { countNotesByCategory } from './utils/countNotesByCategory';
-import { Toggler } from './components/Toggler';
+import { Toggler } from './components/Toggler/Toggler';
 import {
 	addNote,
 	archiveNote,
 	deleteNote,
 	updateNote,
 } from './store/notesSlice';
-import { NoItemsRow } from './components/NoItemsRow';
 import { closeModal, openModal } from './store/modalOpenSlice';
 import { resetActiveNote } from './store/activeNoteSlice';
 
@@ -24,6 +23,7 @@ const App = () => {
 	const toggleAccordingNotes = notes.filter(
 		(note) => note.archived === toggleActive
 	);
+	const modalOpened = useAppSelector((state) => state.modalOpen);
 
 	const dispatch = useAppDispatch();
 
@@ -56,36 +56,36 @@ const App = () => {
 					</colgroup>
 					<thead className='bg-slate-500'>
 						<tr className='text-start'>
-							<th className='px-4 py-2 bg-slate-500 text-transparent select-none'>
+							<th className='px-4 py-2 bg-slate-500 text-transparent select-none text-start'>
 								Icon
 							</th>
-							<th className='px-4 py-2 bg-slate-500 text-white min-w-0'>
+							<th className='px-4 py-2 bg-slate-500 text-white min-w-0 text-start'>
 								Name
 							</th>
-							<th className='px-4 py-2 bg-slate-500 text-white min-w-0'>
+							<th className='px-4 py-2 bg-slate-500 text-white min-w-0 text-start'>
 								Created
 							</th>
-							<th className='px-4 py-2 bg-slate-500 text-white min-w-0'>
+							<th className='px-4 py-2 bg-slate-500 text-white min-w-0 text-start'>
 								Category
 							</th>
-							<th className='px-4 py-2 bg-slate-500 text-white min-w-0'>
+							<th className='px-4 py-2 bg-slate-500 text-white min-w-0 text-start'>
 								Content
 							</th>
-							<th className='px-4 py-2 bg-slate-500 text-white min-w-0'>
+							<th className='px-4 py-2 bg-slate-500 text-white min-w-0 text-start'>
 								Dates
 							</th>
-							<th className='px-4 py-2'>
+							<th className='px-4 py-2 text-start'>
 								<Toggler state={toggleActive} onStateChange={setToggleActive} />
 							</th>
-							<th className='px-4 py-2 bg-slate-500 text-white'>
-								<ActionButton action={archiveAllHandler}>
-									<i className='bx bxs-archive-in'></i>
-								</ActionButton>
+							<th className='px-4 py-2 bg-slate-500 text-white text-start'>
+								<button onClick={archiveAllHandler}>
+									<i className='bx bxs-archive-in text-xl'></i>
+								</button>
 							</th>
-							<th className='px-4 py-2 bg-slate-500 text-white '>
-								<ActionButton action={deleteAllHandler}>
-									<i className='bx bxs-trash'></i>
-								</ActionButton>
+							<th className='px-4 py-2 bg-slate-500 text-white  text-start'>
+								<button onClick={deleteAllHandler}>
+									<i className='bx bxs-trash text-xl'></i>
+								</button>
 							</th>
 						</tr>
 					</thead>
@@ -95,18 +95,23 @@ const App = () => {
 								<NoteRow key={note.id} note={note}></NoteRow>
 							))
 						) : (
-							<NoItemsRow colspan={9} />
+							<tr>
+								<td
+									className='px-4 py-2 bg-slate-200 text-slate-600 font-normal text-center'
+									colSpan={9}>
+									No items
+								</td>
+							</tr>
 						)}
 					</tbody>
 				</NotesTable>
-				<button
-					className='create-btn ml-auto block text-white bg-slate-500 hover:bg-slate-700'
-					onClick={() => {
+				<ActionButton
+					action={() => {
 						dispatch(resetActiveNote());
 						dispatch(openModal());
 					}}>
 					Create Note
-				</button>
+				</ActionButton>
 			</section>
 			<section>
 				<NotesTable>
@@ -129,25 +134,33 @@ const App = () => {
 								/>
 							))
 						) : (
-							<NoItemsRow colspan={4} />
+							<tr>
+								<td
+									className='px-4 py-2 bg-slate-200 text-slate-600 font-normal text-center'
+									colSpan={4}>
+									No items
+								</td>
+							</tr>
 						)}
 					</tbody>
 				</NotesTable>
 			</section>
+			{modalOpened && (
+				<Modal
+					submit={(note) => {
+						if (note.id !== -1) dispatch(updateNote(note));
+						else {
+							note.createdAt = Intl.DateTimeFormat('en-US').format(new Date());
+							note.id = (notes.at(-1)?.id || 0) + 1;
+							dispatch(addNote(note));
+						}
 
-			<Modal
-				submit={(note) => {
-					if (note.id !== -1) dispatch(updateNote(note));
-					else {
-						note.createdAt = Intl.DateTimeFormat('en-US').format(new Date());
-						dispatch(addNote(note));
-					}
-
-					dispatch(closeModal());
-					dispatch(resetActiveNote());
-				}}
-				close={() => dispatch(closeModal())}
-			/>
+						dispatch(closeModal());
+						dispatch(resetActiveNote());
+					}}
+					close={() => dispatch(closeModal())}
+				/>
+			)}
 		</main>
 	);
 };
